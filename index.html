@@ -17,6 +17,8 @@
     --accent: #6366f1;
     --accent-soft: #eef2ff;
     --border: #e5e7eb;
+    --success: #10b981;
+    --success-soft: #ecfdf5;
     --gold: #f59e0b;
     --pink: #ec4899;
   }
@@ -185,12 +187,45 @@
     font-family: inherit;
     color: var(--text);
     line-height: 1.5;
+    -webkit-tap-highlight-color: transparent; /* 移除移动端默认点击高亮 */
+    outline: none; /* 移除点击后的焦点边框 */
   }
-  .option:hover {
-    border-color: var(--accent);
+  
+  /* 仅在支持真正 hover 的设备（如鼠标）上应用 hover 效果，防止手机端粘滞 */
+  @media (hover: hover) and (pointer: fine) {
+    .option:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateX(4px);
+    }
+    .option:hover .option-letter {
+      background: var(--accent);
+      color: white;
+    }
+  }
+
+  /* 移动端按下时的效果 */
+  .option:active {
     background: var(--accent-soft);
+    border-color: var(--accent);
+    transform: scale(0.98);
+  }
+  .option:active .option-letter {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* 选中后的状态（通过 JS 添加） */
+  .option.selected {
+    border-color: var(--success);
+    background: var(--success-soft);
     transform: translateX(4px);
   }
+  .option.selected .option-letter {
+    background: var(--success);
+    color: white;
+  }
+
   .option-letter {
     width: 24px; height: 24px;
     border-radius: 8px;
@@ -202,10 +237,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-  }
-  .option:hover .option-letter {
-    background: var(--accent);
-    color: white;
+    transition: all 0.2s ease;
   }
 
   .nav-row {
@@ -225,6 +257,7 @@
     font-family: inherit;
     color: var(--text);
     transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
   }
   .nav-btn:hover:not(:disabled) {
     background: var(--text);
@@ -827,7 +860,6 @@ const questions = [
     c: '充满变化、惊喜和挑战' },
 ];
 
-/* ============ Results ============ */
 const results = {
   LIRS: {
     emoji: '🔭', name: '深邃的真理猎人', rarity: 3, rarityLabel: '稀有 · 天选之人',
@@ -1103,7 +1135,7 @@ const results = {
     weaknesses: ['可能过于讨好用户', '不擅宏大叙事', '容易被琐事拖累'],
     learningStyle: '项目实践+用户调研',
     workEnv: '设计公司、互联网产品团队、生活品牌',
-    icons: ['深的直人', '原研哉', '无印良品团队'],
+    icons: ['深泽直人', '原研哉', '无印良品团队'],
     spiritAnimal: '考拉 🐨',
     color: '治愈绿 #86efac',
     energy: '一个细节让用户会心一笑',
@@ -1184,6 +1216,13 @@ function renderQuestion() {
 
 function select(opt) {
   answers[current] = opt;
+  
+  // 添加选中状态的视觉反馈
+  const options = document.querySelectorAll('.option');
+  if(options[opt]) {
+    options[opt].classList.add('selected');
+  }
+
   setTimeout(() => {
     if (current < questions.length - 1) {
       current++;
@@ -1191,7 +1230,7 @@ function select(opt) {
     } else {
       showResult();
     }
-  }, 250);
+  }, 300); // 稍微延长一点时间让用户看到绿色选中反馈
 }
 
 function next() {
@@ -1304,9 +1343,8 @@ function showResult() {
     `;
   }).join('');
 
-  // 生成其他类型分布（模拟）
   const otherTypes = Object.keys(results).filter(k => k !== code).slice(0, 3);
-  const otherPct = 30; // 其他类型合计占比
+  const otherPct = 30; 
   const myPct = r.rarity;
   const restPct = 100 - myPct - otherPct;
 
@@ -1415,7 +1453,6 @@ function showResult() {
     </div>
   `;
 
-  // 动画触发
   setTimeout(() => {
     document.querySelectorAll('.dim-fill').forEach(el => {
       el.style.width = el.dataset.w;
