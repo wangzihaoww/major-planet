@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>专业星球 · 你适合学什么专业？</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-sc@5.0.0/index.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.0/index.min.css" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #fafafa;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --accent: #6366f1;
+    --accent-soft: #eef2ff;
+    --border: #e5e7eb;
+    --gold: #f59e0b;
+    --pink: #ec4899;
+  }
+  html, body {
+    font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+  .brand-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px 0;
+    animation: fadeIn 0.6s ease;
+  }
+  .hero-img {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 24px;
+    margin-bottom: 32px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin-bottom: 32px;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+  .tag {
+    padding: 6px 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .btn {
+    padding: 14px 32px;
+    background: var(--text);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover {
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .btn-accent { background: var(--accent); }
+
+  .progress-wrap { margin-bottom: 40px; }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px 28px;
+    animation: slideIn 0.4s ease;
+  }
+  .q-num {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+  .q-text {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .option {
+    padding: 16px 20px;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    background: white;
+    text-align: left;
+    font-family: inherit;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .option:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    transform: translateX(4px);
+  }
+  .option-letter {
+    width: 24px; height: 24px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .option:hover .option-letter {
+    background: var(--accent);
+    color: white;
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+    gap: 12px;
+  }
+  .nav-btn {
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    color: var(--text);
+    transition: all 0.2s ease;
+  }
+  .nav-btn:hover:not(:disabled) {
+    background: var(--text);
+    color: white;
+    border-color: var(--text);
+  }
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ============ Result ============ */
+  .result-wrap {
+    animation: fadeIn 0.6s ease;
+    padding: 20px 0;
+  }
+
+  .result-card {
+    background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+    border-radius: 28px;
+    padding: 40px 28px 32px;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rarity-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 6px 12px;
+    background: white;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .rarity-rare { color: #dc2626; }
+  .rarity-uncommon { color: #f59e0b; }
+  .rarity-common { color: #6b7280; }
+  .result-code {
+    display: inline-block;
+    padding: 6px 16px;
+    background: white;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .result-emoji {
+    font-size: 56px;
+    margin-bottom: 12px;
+    display: block;
+    animation: bounce 2s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .result-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .result-desc {
+    color: #4b5563;
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 20px;
+  }
+  .rarity-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: white;
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .rarity-stat strong {
+    color: var(--accent);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  /* Section common */
+  .section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .section:nth-child(2) { animation-delay: 0.1s; }
+  .section:nth-child(3) { animation-delay: 0.2s; }
+  .section:nth-child(4) { animation-delay: 0.3s; }
+  .section:nth-child(5) { animation-delay: 0.4s; }
+  .section:nth-child(6) { animation-delay: 0.5s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Keywords */
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .keyword {
+    padding: 6px 14px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Dimensions */
+  .dim-item { margin-bottom: 18px; }
+  .dim-item:last-child { margin-bottom: 0; }
+  .dim-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: var(--muted);
+  }
+  .dim-label-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .dim-label.active { color: var(--text); font-weight: 600; }
+  .dim-strength {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .dim-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .dim-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #a78bfa);
+    border-radius: 999px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Strengths/weaknesses */
+  .sw-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .sw-box {
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .sw-box.strength {
+    background: #f0fdf4;
+    color: #166534;
+  }
+  .sw-box.weakness {
+    background: #fef2f2;
+    color: #991b1b;
+  }
+  .sw-label {
+    font-weight: 600;
+    font-size: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .sw-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .sw-box li {
+    padding: 2px 0;
+    position: relative;
+    padding-left: 14px;
+  }
+  .sw-box li::before {
+    content: '·';
+    position: absolute;
+    left: 2px;
+    font-weight: bold;
+  }
+
+  /* Profile grid */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .profile-item {
+    padding: 14px;
+    background: var(--bg);
+    border-radius: 12px;
+    font-size: 13px;
+  }
+  .profile-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .profile-val {
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* Icons row */
+  .icons-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .icon-chip {
+    padding: 6px 12px;
+    background: var(--bg);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Motto */
+  .motto {
+    text-align: center;
+    padding: 24px 20px;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-radius: 16px;
+    font-size: 15px;
+    color: #78350f;
+    font-weight: 500;
+    line-height: 1.6;
+    font-style: italic;
+    position: relative;
+  }
+  .motto::before {
+    content: '"';
+    font-size: 48px;
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    color: #f59e0b;
+    opacity: 0.4;
+    font-family: Georgia, serif;
+  }
+  .motto-label {
+    font-size: 11px;
+    color: #92400e;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  /* Majors */
+  .major {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+  .major:last-child { margin-bottom: 0; }
+  .major:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99,102,241,0.08);
+  }
+  .major-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .major-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .major-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .major-name {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .fit-badge {
+    padding: 4px 10px;
+    background: var(--accent);
+    color: white;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .major-reason {
+    font-size: 13px;
+    color: #4b5563;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .major-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  .meta-item {
+    padding: 8px 10px;
+    background: white;
+    border-radius: 8px;
+  }
+  .meta-label {
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+  .meta-val {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .major-warn {
+    padding: 10px 12px;
+    background: #fff7ed;
+    border-left: 3px solid #f59e0b;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #92400e;
+    line-height: 1.5;
+  }
+  .major-warn strong { color: #78350f; }
+
+  /* Distribution */
+  .dist-chart {
+    display: flex;
+    gap: 4px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .dist-seg {
+    transition: flex 0.8s ease;
+    position: relative;
+  }
+  .dist-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 32px 0 20px;
+  }
+
+  .disclaimer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: var(--text);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @media (max-width: 560px) {
+    .container { padding: 16px; }
+    .question-card { padding: 24px 20px; }
+    .result-card { padding: 32px 20px; }
+    .actions { grid-template-columns: 1fr; }
+    .sw-grid, .profile-grid { grid-template-columns: 1fr; }
+    .result-title { font-size: 26px; }
+    .rarity-badge { position: static; margin: 0 auto 12px; width: fit-content; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span>专业星球</span>
+  </div>
+
+  <section id="landing" class="hero">
+    <img class="hero-img" src="https://image.qwenlm.ai/public_source/e6a26900-81a6-4fef-8ea9-e7841bc82907/108f9b9ba-1af7-4f79-bbbc-22c362817cab.png" alt="" />
+    <h1>你最适合<span>学什么专业</span>？</h1>
+    <p>24道趣味情境题，从思维、工作、兴趣、价值四个维度，发现你和专业之间奇妙的化学反应</p>
+    <div class="tags">
+      <span class="tag">⏱ 约 3-5 分钟</span>
+      <span class="tag">🎯 24 道情境题</span>
+      <span class="tag">🔬 深度人格解析</span>
+    </div>
+    <button class="btn btn-accent" onclick="startTest()">开始测试 →</button>
+  </section>
+
+  <section id="test" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="progressText">第 1 / 24 题</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+    </div>
+    <div id="questionBox"></div>
+  </section>
+
+  <section id="result" style="display:none;"></section>
+
+  <div class="disclaimer">⚠️ 本测试仅供娱乐参考，不构成专业建议</div>
+</div>
+
+<div class="toast" id="toast">✓ 结果已复制到剪贴板</div>
+
+<script>
+const questions = [
+  { dim: 'LC', text: '朋友失恋找你倾诉，你的第一反应是？',
+    a: '帮他分析问题，列出下一步行动',
+    b: '带他出去散心，找点乐子转移注意力',
+    c: '先共情陪伴，耐心倾听他的感受' },
+  { dim: 'LC', text: '看到一个惊艳的广告，你会先注意？',
+    a: '它的商业模式和传播策略',
+    b: '它讲了什么故事、传达什么情感',
+    c: '它的创意表达和视觉美感' },
+  { dim: 'LC', text: '尝试一道从没做过的菜，你倾向于？',
+    a: '严格按照食谱一步步来',
+    b: '看食谱但会根据口味适当调整',
+    c: '凭感觉随意搭配，创造新口味' },
+  { dim: 'LC', text: '周末放松时，你更想？',
+    a: '看一部悬疑推理电影',
+    b: '看一部温情治愈电影',
+    c: '看一部奇幻文艺电影' },
+  { dim: 'LC', text: '面对一道难题，你更喜欢？',
+    a: '用公式或逻辑一步步推导',
+    b: '查资料找到类似的解法作为参考',
+    c: '靠直觉和灵感找到突破口' },
+  { dim: 'LC', text: '下面哪件事更让你有成就感？',
+    a: '独立解出一道复杂数学题',
+    b: '完成一个既有逻辑又有美感的项目',
+    c: '写出一篇让自己满意的文章' },
+
+  { dim: 'IT', text: '小组作业中，你通常扮演什么角色？',
+    a: '自己搞定最关键的部分',
+    b: '做最擅长的那部分，其余和大家分工',
+    c: '和大家讨论着一起推进' },
+  { dim: 'IT', text: '理想的周末学习方式是？',
+    a: '独自去图书馆安静啃书',
+    b: '和好友一起去图书馆，各学各的',
+    c: '和同学一起讨论交流，互相讲解' },
+  { dim: 'IT', text: '未来工作中，你更想要？',
+    a: '自己的独立办公室',
+    b: '灵活办公，需要时再协作',
+    c: '开放式团队协作环境' },
+  { dim: 'IT', text: '解决复杂问题时，你更需要？',
+    a: '一段不被打扰的独处时光',
+    b: '先独立思考，再找人讨论验证',
+    c: '一场热闹的头脑风暴' },
+  { dim: 'IT', text: '什么时刻让你最有成就感？',
+    a: '一个人突破某个难关',
+    b: '和伙伴一起做出好作品',
+    c: '带领团队完成一个项目' },
+  { dim: 'IT', text: '你更认同哪句话？',
+    a: '"天才都是孤独的"',
+    b: '"一个人走得快，一群人走得远"',
+    c: '"三个臭皮匠顶个诸葛亮"' },
+
+  { dim: 'RP', text: '对宇宙，你更想搞清楚？',
+    a: '宇宙是怎么诞生的、本质是什么',
+    b: '宇宙有哪些神奇的现象和规律',
+    c: '人类怎么飞上太空、探索宇宙' },
+  { dim: 'RP', text: '读一本书，你更偏好？',
+    a: '讲原理和本质的内容',
+    b: '讲历史和演变过程的内容',
+    c: '讲案例和实用方法的内容' },
+  { dim: 'RP', text: '对于 AI，你更感兴趣的是？',
+    a: '它到底是怎么"思考"的',
+    b: '它的发展历史和未来趋势',
+    c: '它能为我做什么实际的事' },
+  { dim: 'RP', text: '你更欣赏哪位？',
+    a: '爱因斯坦——探索宇宙真理',
+    b: '达芬奇——理论与艺术并重',
+    c: '马斯克——把想法变成现实' },
+  { dim: 'RP', text: '学习一个新知识时，你更关心？',
+    a: '它为什么是这样',
+    b: '它和其他知识有什么联系',
+    c: '它怎么用得上' },
+  { dim: 'RP', text: '理想的一堂课是？',
+    a: '教授娓娓道来理论推导',
+    b: '理论和案例相结合，深入浅出',
+    c: '动手做实验或完成一个项目' },
+
+  { dim: 'SA', text: '毕业后你的首选是？',
+    a: '进入稳定的大公司',
+    b: '去中等规模有发展潜力的公司',
+    c: '加入有潜力的创业公司' },
+  { dim: 'SA', text: '你对"体制内"工作的看法是？',
+    a: '安全有保障，挺好的',
+    b: '稳定但可能无聊，看个人选择',
+    c: '太束缚了，不适合我' },
+  { dim: 'SA', text: '面对高风险高回报的机会？',
+    a: '谨慎为上，选稳妥的',
+    b: '小试牛刀，投入一部分试试',
+    c: '值得冒险，搏一搏' },
+  { dim: 'SA', text: '你更羡慕哪种生活？',
+    a: '年薪百万、稳步晋升的高管',
+    b: '工作与兴趣平衡的中产生活',
+    c: '环游世界、自由随性的数字游民' },
+  { dim: 'SA', text: '选专业时，你最优先考虑？',
+    a: '就业率和薪资水平',
+    b: '综合兴趣与就业的平衡',
+    c: '个人热情和兴趣' },
+  { dim: 'SA', text: '你理想的生活节奏是？',
+    a: '规律、稳定、可预期',
+    b: '大体稳定，偶尔有变化',
+    c: '充满变化、惊喜和挑战' },
+];
+
+/* ============ Results ============ */
+const results = {
+  LIRS: {
+    emoji: '🔭', name: '深邃的真理猎人', rarity: 3, rarityLabel: '稀有 · 天选之人',
+    desc: '你热爱纯粹的逻辑与理论，喜欢在安静的环境里独立探索世界的本质。你的专注力和思辨能力令人佩服，是典型的"思想苦行僧"。',
+    keywords: ['深度思考', '极致专注', '理性纯粹', '学术型'],
+    strengths: ['超强的专注力和耐心', '逻辑严密，善于推导', '耐得住寂寞和枯燥'],
+    weaknesses: ['可能过于理想主义', '不擅社交表达', '容易钻牛角尖'],
+    learningStyle: '独自研读经典，从第一性原理思考',
+    workEnv: '安静的书房、研究所，远离喧嚣',
+    icons: ['爱因斯坦', '陈景润', '佩雷尔曼'],
+    spiritAnimal: '猫头鹰 🦉',
+    color: '深邃蓝 #1e3a8a',
+    energy: '解开一个困扰已久的难题',
+    motto: '真理不在热闹的广场，而在寂静的书桌上。',
+    majors: [
+      { icon:'📐', name:'数学', fit:96, reason:'满足你对纯粹逻辑和抽象思考的热爱', jobs:'高校科研、金融量化、AI算法', difficulty:5, warn:'就业面较窄，通常需要读博深造，做好长期投入的准备' },
+      { icon:'🌌', name:'理论物理', fit:94, reason:'探索宇宙最底层的运行规律', jobs:'科研院所、高校、天文台', difficulty:5, warn:'极度冷门且竞争激烈，需要顶尖的天赋和极大的热情' },
+      { icon:'📊', name:'统计学', fit:90, reason:'用严谨的数学语言描述世界', jobs:'数据分析师、精算师、科研人员', difficulty:4, warn:'数学要求极高，课程强度大，不适合临时抱佛脚' },
+    ]
+  },
+  LIRA: {
+    emoji: '⚛️', name: '孤独的先锋探索者', rarity: 2, rarityLabel: '极稀有 · 天选之人',
+    desc: '你有独立的科研精神和冒险的学术勇气，愿意在无人踏足的领域独自深耕，追求真理的边界。你是学术界的"孤胆英雄"。',
+    keywords: ['先锋精神', '独立思考', '冒险科研', '跨界者'],
+    strengths: ['敢于挑战未知领域', '独立解决问题能力强', '跨学科思维敏锐'],
+    weaknesses: ['容易忽视现实需求', '团队协作能力偏弱', '可能过于特立独行'],
+    learningStyle: '跨学科自学，勇于探索无人区',
+    workEnv: '前沿实验室、独立研究岗位',
+    icons: ['居里夫人', '图灵', '张益唐'],
+    spiritAnimal: '雪豹 🐆',
+    color: '银河紫 #581c87',
+    energy: '在无人区发现全新的现象',
+    motto: '真正的探索者，从不问路在何方。',
+    majors: [
+      { icon:'🔬', name:'前沿科学研究', fit:95, reason:'在无人区探索未知的快感', jobs:'顶尖研究所、科技企业研究院', difficulty:5, warn:'需要顶尖学术背景和长期投入，成功率较低' },
+      { icon:'🧬', name:'生物信息学', fit:92, reason:'跨学科交叉的智力冒险', jobs:'生物科技公司、医药研发', difficulty:5, warn:'需要同时掌握生物和计算机，学习曲线陡峭' },
+      { icon:'🌠', name:'天文学', fit:90, reason:'仰望星空，挑战人类认知极限', jobs:'天文台、科研院所、科普媒体', difficulty:5, warn:'就业面极窄，岗位稀缺，需要读博+海外经历' },
+    ]
+  },
+  LIPS: {
+    emoji: '💻', name: '稳健的技术匠人', rarity: 8, rarityLabel: '少见 · 独特存在',
+    desc: '你擅长用逻辑和代码解决实际问题，在独立钻研中获得稳定感和掌控感，是团队里最靠谱的技术派，默默把事情做到极致。',
+    keywords: ['技术扎实', '靠谱稳定', '独立钻研', '工程师思维'],
+    strengths: ['代码/技术功底扎实', '做事严谨有条理', '抗压能力强'],
+    weaknesses: ['表达和沟通能力一般', '不擅长推销自己', '可能忽视人际网络'],
+    learningStyle: '系统学习+大量实战练习',
+    workEnv: '独立工位、远程办公、技术驱动型公司',
+    icons: ['林纳斯', '扎克伯格早期', '张小龙'],
+    spiritAnimal: '海狸 🦫',
+    color: '工业灰 #475569',
+    energy: '完成一个高质量的技术项目',
+    motto: '代码不会骗人，付出多少就回报多少。',
+    majors: [
+      { icon:'💻', name:'计算机科学', fit:95, reason:'用代码构建稳定可靠的系统', jobs:'软件工程师、架构师、技术专家', difficulty:4, warn:'行业竞争日趋激烈，需要持续学习新技术' },
+      { icon:'📈', name:'数据科学', fit:92, reason:'用数据洞察商业真相', jobs:'数据分析师、算法工程师、BI分析师', difficulty:4, warn:'需要统计学+编程双重能力，入门门槛不低' },
+      { icon:'🧾', name:'会计学', fit:88, reason:'严谨、精确、职业稳定', jobs:'会计师、审计、财务分析', difficulty:3, warn:'工作内容相对枯燥，AI正在替代部分基础工作' },
+    ]
+  },
+  LIPA: {
+    emoji: '🤖', name: '破局的硬核极客', rarity: 4, rarityLabel: '稀有 · 天选之人',
+    desc: '你既有扎实的逻辑功底，又敢于冒险挑战高难度问题，是天生的技术冒险家。越难的问题越让你兴奋，越前沿的领域越想尝试。',
+    keywords: ['硬核技术', '冒险精神', '问题猎手', '前沿玩家'],
+    strengths: ['解决复杂问题能力强', '勇于挑战技术高峰', '学习新技术速度快'],
+    weaknesses: ['容易忽略团队感受', '可能冒进踩坑', '不善情绪管理'],
+    learningStyle: '边学边干，挑战高难度项目',
+    workEnv: '技术驱动、高压但高回报的创业公司',
+    icons: ['马斯克', 'Sam Altman', '黄仁勋'],
+    spiritAnimal: '猎鹰 🦅',
+    color: '极客黑 #0f172a',
+    energy: '用技术颠覆一个传统行业',
+    motto: '规则是给平庸者定的，极客负责打破它。',
+    majors: [
+      { icon:'🤖', name:'人工智能', fit:97, reason:'站在技术浪潮的最前沿', jobs:'AI工程师、算法研究员、创业', difficulty:5, warn:'技术迭代极快，需要终身学习，竞争激烈' },
+      { icon:'🔐', name:'网络安全', fit:93, reason:'高风险高回报的技术战场', jobs:'安全工程师、白帽黑客、安全顾问', difficulty:4, warn:'需要极强的自学能力，技术更新快，责任重大' },
+      { icon:'💰', name:'量化金融', fit:91, reason:'用数学征服资本市场', jobs:'量化交易员、金融工程师', difficulty:5, warn:'高压力高淘汰率，数学和编程都要顶尖' },
+    ]
+  },
+  LTRS: {
+    emoji: '⚖️', name: '理性的秩序守护者', rarity: 7, rarityLabel: '少见 · 独特存在',
+    desc: '你善于用逻辑分析社会问题，在团队中推动理性决策，追求稳定而有序的未来。你是团队里的"定海神针"，总能用理性化解混乱。',
+    keywords: ['理性决策', '秩序感', '团队智囊', '规则导向'],
+    strengths: ['分析社会问题有洞见', '善于制定规则和流程', '在团队中提供理性视角'],
+    weaknesses: ['可能过于保守', '对情感议题不够敏感', '不擅处理模糊问题'],
+    learningStyle: '案例学习+小组讨论',
+    workEnv: '律所、咨询公司、政府机关等正规机构',
+    icons: ['李光耀', '巴菲特', '罗翔'],
+    spiritAnimal: '德牧 🐕‍🦺',
+    color: '正义红 #991b1b',
+    energy: '用规则解决一个社会问题',
+    motto: '没有规则的善良，是另一种伤害。',
+    majors: [
+      { icon:'⚖️', name:'法学', fit:94, reason:'用逻辑和规则守护秩序', jobs:'律师、法官、法务顾问', difficulty:4, warn:'法考难度极高，前期薪资较低，需要长期积累' },
+      { icon:'📉', name:'经济学', fit:92, reason:'理解社会运行的底层逻辑', jobs:'经济分析师、政策研究员、投资顾问', difficulty:4, warn:'数学要求高，理论性强，本科就业面一般' },
+      { icon:'🏛', name:'公共政策', fit:88, reason:'在团队中推动理性决策', jobs:'政府机关、智库、NGO', difficulty:3, warn:'体制内竞争激烈，需要积累人脉和实习经验' },
+    ]
+  },
+  LTRA: {
+    emoji: '🎯', name: '冷静的战略家', rarity: 5, rarityLabel: '少见 · 独特存在',
+    desc: '你兼具逻辑思维和团队领导力，喜欢在变化的环境中制定战略、掌控全局。你是商场上的"冷面将军"，越混乱越冷静。',
+    keywords: ['战略思维', '冷静决策', '团队领袖', '商业嗅觉'],
+    strengths: ['战略眼光和判断力强', '能在高压下保持冷静', '善于带领团队拿结果'],
+    weaknesses: ['可能显得过于功利', '不擅长处理感性话题', '容易独断专行'],
+    learningStyle: '案例研究+实战模拟+商业比赛',
+    workEnv: '咨询公司、投资银行、战略部门',
+    icons: ['贝索斯', '张一鸣', '孙正义'],
+    spiritAnimal: '狮子 🦁',
+    color: '帝王紫 #4c1d95',
+    energy: '制定并执行一个改变局势的战略',
+    motto: '战略不是计划未来，是塑造未来。',
+    majors: [
+      { icon:'💼', name:'战略咨询', fit:94, reason:'为复杂商业问题制定战略', jobs:'MBB咨询、企业战略部、投资', difficulty:5, warn:'行业门槛极高，需要顶尖学历+高强度工作' },
+      { icon:'🌐', name:'国际关系', fit:90, reason:'在全球变局中把握大势', jobs:'外交部、国际组织、跨国企业', difficulty:3, warn:'就业方向模糊，需要语言能力+实习经验' },
+      { icon:'🏦', name:'金融工程', fit:93, reason:'在风险与收益间寻找最优解', jobs:'投行、对冲基金、风投', difficulty:5, warn:'高强度高压力，数学编程要求极高' },
+    ]
+  },
+  LTPS: {
+    emoji: '🏗', name: '可靠的实干工程师', rarity: 12, rarityLabel: '常见 · 大众之选',
+    desc: '你擅长在团队中用理性方法解决实际工程问题，追求看得见、摸得着的稳定成果。你是社会运转的基石，是值得信赖的"中流砥柱"。',
+    keywords: ['实干派', '可靠踏实', '团队协作', '工程思维'],
+    strengths: ['执行力极强', '团队协作顺畅', '抗压稳定'],
+    weaknesses: ['创新意识偏弱', '可能过于保守', '不擅自我表达'],
+    learningStyle: '系统学习+实习实践',
+    workEnv: '大型工程公司、医院、国企',
+    icons: ['钱学森', '袁隆平', '南仁东'],
+    spiritAnimal: '黄牛 🐂',
+    color: '钢铁蓝 #1e40af',
+    energy: '看到一个自己参与的项目落地',
+    motto: '伟大的工程，都是普通人一砖一瓦建起来的。',
+    majors: [
+      { icon:'🏗', name:'土木工程', fit:92, reason:'用工程思维建造稳定世界', jobs:'工程师、项目经理、设计院', difficulty:3, warn:'行业周期性明显，近年来就业形势严峻' },
+      { icon:'⚡', name:'电气工程', fit:94, reason:'严谨可靠的硬核技术', jobs:'电力公司、自动化企业、电网', difficulty:4, warn:'课程难度高，需要扎实的数理基础' },
+      { icon:'🩺', name:'临床医学', fit:90, reason:'团队协作拯救生命', jobs:'医生、医疗科研', difficulty:5, warn:'学制长(5+3+X)、压力大、前期收入低' },
+    ]
+  },
+  LTPA: {
+    emoji: '🚀', name: '硬核的团队领袖', rarity: 6, rarityLabel: '少见 · 独特存在',
+    desc: '你既有硬核的技术能力，又有冒险的团队魄力，能在高压环境下带领团队完成不可能的任务。你是科技时代的"创业将军"。',
+    keywords: ['技术领袖', '创业精神', '高压战士', '团队驱动'],
+    strengths: ['技术+管理双修', '高压环境下的决策力', '敢于冒险有魄力'],
+    weaknesses: ['可能过于强势', '忽视团队成员感受', '工作生活失衡'],
+    learningStyle: '项目驱动+创业实践',
+    workEnv: '高科技创业公司、硬科技企业',
+    icons: ['马斯克', '任正非', '雷军'],
+    spiritAnimal: '战狼 🐺',
+    color: '火箭红 #dc2626',
+    energy: '带领团队完成一个不可能的任务',
+    motto: '没有退路的时候，就是胜利之路。',
+    majors: [
+      { icon:'🚀', name:'航空航天', fit:93, reason:'带领团队挑战科技极限', jobs:'航天院所、民营航天、军工', difficulty:5, warn:'进入门槛高，需要顶尖学历和身体素质' },
+      { icon:'🏥', name:'急诊医学', fit:88, reason:'高压环境下的生死抉择', jobs:'急诊医生、ICU医生', difficulty:5, warn:'工作强度极大，身心压力高，职业倦怠率高' },
+      { icon:'🏢', name:'创业管理', fit:91, reason:'用逻辑和魄力开创事业', jobs:'创业者、投资、高管', difficulty:4, warn:'创业成功率低，需要极强抗压能力和资源整合' },
+    ]
+  },
+  CIRS: {
+    emoji: '📚', name: '沉静的思想漫步者', rarity: 4, rarityLabel: '稀有 · 天选之人',
+    desc: '你热爱在安静的环境里独立思考人生、历史与文化的深层意义，是典型的人文主义者。你的内心比外表丰富得多。',
+    keywords: ['人文情怀', '深度思考', '内省者', '思想漫步'],
+    strengths: ['洞察力强，能看透本质', '文字表达能力好', '对文化有深刻理解'],
+    weaknesses: ['可能过于理想化', '不善应对现实压力', '容易陷入沉思'],
+    learningStyle: '大量阅读+独立写作',
+    workEnv: '图书馆、书房、安静的研究机构',
+    icons: ['博尔赫斯', '钱钟书', '木心'],
+    spiritAnimal: '猫 🐈',
+    color: '书卷褐 #78350f',
+    energy: '读完一本改变世界观的书',
+    motto: '世界喧嚣，而我独自在书页间漫游。',
+    majors: [
+      { icon:'📜', name:'哲学', fit:94, reason:'探索人类思想的本质', jobs:'高校科研、出版、文化机构', difficulty:4, warn:'就业面极窄，通常需要读博，适合有情怀的人' },
+      { icon:'🏺', name:'历史学', fit:92, reason:'在时间长河中漫步思考', jobs:'教师、研究员、博物馆', difficulty:3, warn:'就业面较窄，需要对历史有真正热爱' },
+      { icon:'🔤', name:'语言学', fit:89, reason:'研究人类表达的精妙结构', jobs:'语言研究、翻译、AI语言学', difficulty:4, warn:'理论性强，需要扎实的学术功底' },
+    ]
+  },
+  CIRA: {
+    emoji: '🎭', name: '自由的艺术灵魂', rarity: 2, rarityLabel: '极稀有 · 天选之人',
+    desc: '你拥有独立的审美和冒险的艺术追求，愿意为了表达自我而走上一条不被理解的道路。你是艺术界的"流浪诗人"。',
+    keywords: ['自由灵魂', '艺术冒险', '独立审美', '表达欲强'],
+    strengths: ['极强的艺术感知力', '敢于走不寻常的路', '有独特的个人风格'],
+    weaknesses: ['收入不稳定', '可能过于自我', '不擅长期规划'],
+    learningStyle: '游学、创作、体验式学习',
+    workEnv: '艺术工作室、自由创作环境',
+    icons: ['梵高', '村上春树', '草间弥生'],
+    spiritAnimal: '自由鸟 🕊️',
+    color: '波西米亚橙 #c2410c',
+    energy: '创作出一个打动人心的作品',
+    motto: '艺术是我的氧气，自由是我的信仰。',
+    majors: [
+      { icon:'🎨', name:'艺术理论', fit:92, reason:'深入探索美学与表达', jobs:'艺术评论、策展、艺术教育', difficulty:3, warn:'就业面窄，需要持续的艺术积累和人脉' },
+      { icon:'🌍', name:'人类学', fit:89, reason:'冒险进入陌生文化研究', jobs:'研究、NGO、跨文化咨询', difficulty:4, warn:'需要长期田野调查，学术门槛高' },
+      { icon:'✍️', name:'创意写作', fit:94, reason:'用文字冒险探索人性', jobs:'作家、编剧、自媒体', difficulty:3, warn:'收入不稳定，需要极强的自律和抗压' },
+    ]
+  },
+  CIPS: {
+    emoji: '🎨', name: '精致的独立创作者', rarity: 6, rarityLabel: '少见 · 独特存在',
+    desc: '你享受一个人安静创作的时光，用创意和美感打造属于自己的精致作品。你是生活中的"美学匠人"，追求每一个细节的质感。',
+    keywords: ['精致美学', '独立创作', '匠人精神', '细节控'],
+    strengths: ['审美能力极强', '独立创作能力强', '追求细节和质感'],
+    weaknesses: ['可能过于追求完美', '不擅团队合作', '商业化能力偏弱'],
+    learningStyle: '独立练习+作品积累',
+    workEnv: '个人工作室、自由职业',
+    icons: ['原研哉', '隈研吾', '山本耀司'],
+    spiritAnimal: '天鹅 🦢',
+    color: '象牙白 #fef3c7',
+    energy: '完成一个让自己满意的作品',
+    motto: '美，是一种信仰，值得独自坚守。',
+    majors: [
+      { icon:'✏️', name:'平面设计', fit:94, reason:'独立打造视觉美学', jobs:'设计师、自由职业、品牌顾问', difficulty:3, warn:'AI设计工具兴起，需要保持独特创意风格' },
+      { icon:'🏛', name:'建筑学', fit:91, reason:'用创意塑造空间', jobs:'建筑师、设计师、规划师', difficulty:5, warn:'学制长(5年)、工作强度大、熬夜是常态' },
+      { icon:'🌿', name:'园林设计', fit:88, reason:'在安静中创造自然之美', jobs:'景观设计师、园林规划', difficulty:3, warn:'受房地产周期影响大，就业机会波动' },
+    ]
+  },
+  CIPA: {
+    emoji: '🎬', name: '叛逆的创意狂人', rarity: 3, rarityLabel: '稀有 · 天选之人',
+    desc: '你有天马行空的创意和不安分的灵魂，喜欢用独立的方式做出让人眼前一亮的作品。你是创意界的"离经叛道者"。',
+    keywords: ['天马行空', '叛逆创意', '独立表达', '颠覆常规'],
+    strengths: ['极强的创意思维', '敢于突破常规', '有独特的个人风格'],
+    weaknesses: ['可能不够踏实', '不擅长期执行', '对商业规则有抵触'],
+    learningStyle: '边玩边学，做实验性项目',
+    workEnv: '创意工作室、独立创作、自由职业',
+    icons: ['昆汀', 'Lady Gaga', '班克斯'],
+    spiritAnimal: '变色龙 🦎',
+    color: '赛博粉 #ec4899',
+    energy: '用一个作品颠覆人们的想象',
+    motto: '无聊是最大的罪过，叛逆是最好的创意。',
+    majors: [
+      { icon:'🎞', name:'动画设计', fit:93, reason:'用想象力创造新世界', jobs:'动画师、独立动画、游戏美术', difficulty:4, warn:'工作强度大，加班多，需要长期技术积累' },
+      { icon:'🎬', name:'独立电影', fit:95, reason:'用镜头冒险表达自我', jobs:'导演、编剧、独立制片人', difficulty:5, warn:'成功率极低，需要极强创作力和资源积累' },
+      { icon:'👗', name:'时装设计', fit:91, reason:'用布料讲述叛逆故事', jobs:'设计师、独立品牌、时尚编辑', difficulty:4, warn:'行业竞争激烈，需要强人脉和商业化能力' },
+    ]
+  },
+  CTRS: {
+    emoji: '🤝', name: '温暖的共情引导者', rarity: 11, rarityLabel: '常见 · 大众之选',
+    desc: '你善于倾听、共情他人，在团队中扮演温暖的角色，追求稳定而有意义的人际关系。你是团队里的"情感黏合剂"。',
+    keywords: ['共情力强', '温暖倾听', '团队调和', '利他主义'],
+    strengths: ['极强的共情和倾听能力', '善于调和人际关系', '耐心温柔'],
+    weaknesses: ['容易过度共情', '可能忽视自己需求', '不擅拒绝他人'],
+    learningStyle: '小组学习+案例讨论+实践',
+    workEnv: '学校、医院、社区、教育机构',
+    icons: ['特蕾莎修女', '罗杰斯', '张桂梅'],
+    spiritAnimal: '金毛犬 🐕',
+    color: '暖阳黄 #eab308',
+    energy: '看到别人因为自己变得更好',
+    motto: '温暖别人，是最高级的自我实现。',
+    majors: [
+      { icon:'👨‍🏫', name:'教育学', fit:95, reason:'在团队中传递温暖和知识', jobs:'教师、教育研究员、培训师', difficulty:3, warn:'教师编制竞争激烈，工作压力日益增大' },
+      { icon:'🧠', name:'心理学', fit:94, reason:'理解并帮助他人的内心', jobs:'心理咨询师、学校心理老师', difficulty:4, warn:'需要硕士以上学历，前期收入较低' },
+      { icon:'💞', name:'社会工作', fit:90, reason:'用共情改变他人的生活', jobs:'社工、公益组织、社区服务', difficulty:3, warn:'社会认可度和薪资水平普遍偏低' },
+    ]
+  },
+  CTRA: {
+    emoji: '📣', name: '闪光的故事传播者', rarity: 8, rarityLabel: '少见 · 独特存在',
+    desc: '你有敏锐的洞察和表达欲，喜欢在团队中用创意和故事影响他人，追求新鲜有趣的挑战。你是新时代的"故事猎手"。',
+    keywords: ['表达欲强', '故事思维', '影响他人', '创意传播'],
+    strengths: ['表达和演讲能力强', '善于用故事打动人', '对新事物敏感'],
+    weaknesses: ['可能过于追求新鲜感', '深度钻研不够', '容易被流量绑架'],
+    learningStyle: '案例学习+项目实践',
+    workEnv: '媒体公司、广告公司、内容团队',
+    icons: ['罗振宇', '李诞', '李佳琦'],
+    spiritAnimal: '鹦鹉 🦜',
+    color: '荧光绿 #10b981',
+    energy: '一个内容引爆全网',
+    motto: '世界不缺故事，缺会讲故事的人。',
+    majors: [
+      { icon:'📰', name:'新闻传播', fit:94, reason:'用故事影响世界', jobs:'记者、编辑、内容运营', difficulty:3, warn:'行业变化快，传统媒体式微，需要持续转型' },
+      { icon:'🎯', name:'广告策划', fit:93, reason:'用创意打动消费者', jobs:'广告策划、品牌经理、内容营销', difficulty:3, warn:'行业竞争激烈，加班多，压力大' },
+      { icon:'🔍', name:'社会学', fit:88, reason:'研究社会变化的有趣规律', jobs:'研究员、咨询、媒体', difficulty:3, warn:'就业方向模糊，需要积累实习和人脉' },
+    ]
+  },
+  CTPS: {
+    emoji: '🎭', name: '细腻的生活设计师', rarity: 9, rarityLabel: '常见 · 大众之选',
+    desc: '你善于在团队中发挥创意，用细腻的美感打造日常生活中令人舒适的空间与体验。你是生活里的"温暖造物者"。',
+    keywords: ['细腻温暖', '生活美学', '团队创意', '用户体验'],
+    strengths: ['对用户需求敏感', '善于细节打磨', '团队协作顺畅'],
+    weaknesses: ['可能过于讨好用户', '不擅宏大叙事', '容易被琐事拖累'],
+    learningStyle: '项目实践+用户调研',
+    workEnv: '设计公司、互联网产品团队、生活品牌',
+    icons: ['深的直人', '原研哉', '无印良品团队'],
+    spiritAnimal: '考拉 🐨',
+    color: '治愈绿 #86efac',
+    energy: '一个细节让用户会心一笑',
+    motto: '好的设计，是让使用者感到被爱。',
+    majors: [
+      { icon:'🏠', name:'室内设计', fit:93, reason:'用美学改善生活空间', jobs:'室内设计师、软装设计师', difficulty:3, warn:'需要跑工地，体力要求高，加班多' },
+      { icon:'📱', name:'UI/UX 设计', fit:95, reason:'让数字产品更温暖', jobs:'交互设计师、产品设计师', difficulty:3, warn:'行业竞争激烈，需要持续学习新工具' },
+      { icon:'🖼', name:'博物馆策展', fit:88, reason:'用创意呈现文化', jobs:'策展人、文化机构、美术馆', difficulty:3, warn:'岗位稀缺，需要人脉和学术背景' },
+    ]
+  },
+  CTPA: {
+    emoji: '🎪', name: '天生的舞台主角', rarity: 10, rarityLabel: '常见 · 大众之选',
+    desc: '你有强大的表达欲和感染力，喜欢在团队中担任主角，享受变化、聚光灯和掌声。你是人群中的"焦点制造机"。',
+    keywords: ['舞台感强', '表达天赋', '感染力', '聚光灯体质'],
+    strengths: ['极强的表达和感染力', '善于调动气氛', '敢于表现自己'],
+    weaknesses: ['可能过于追求关注', '不擅深度思考', '容易浮躁'],
+    learningStyle: '表演实践+案例学习',
+    workEnv: '舞台、片场、活动现场',
+    icons: ['周杰伦', '蔡康永', '罗永浩'],
+    spiritAnimal: '孔雀 🦚',
+    color: '星光金 #fbbf24',
+    energy: '在人群中成为焦点和中心',
+    motto: '人生如戏，我就是自己人生的主角。',
+    majors: [
+      { icon:'🎬', name:'导演', fit:93, reason:'用创意带领团队讲故事', jobs:'导演、制片人、视频创作者', difficulty:5, warn:'行业门槛高，成功率低，需要长期积累' },
+      { icon:'📊', name:'市场营销', fit:94, reason:'用创意征服市场', jobs:'市场经理、品牌策划、增长运营', difficulty:3, warn:'需要持续学习，压力大，业绩导向' },
+      { icon:'🎉', name:'活动策划', fit:92, reason:'在变化中创造精彩现场', jobs:'活动策划、会展、公关', difficulty:3, warn:'加班多，现场压力大，工作不稳定' },
+    ]
+  },
+};
+
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+
+function startTest() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('test').style.display = 'block';
+  current = 0;
+  answers = new Array(questions.length).fill(null);
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  const pct = Math.round((current / questions.length) * 100);
+  document.getElementById('progressText').textContent = `第 ${current + 1} / ${questions.length} 题`;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const box = document.getElementById('questionBox');
+  box.innerHTML = `
+    <div class="question-card">
+      <div class="q-num">QUESTION ${String(current + 1).padStart(2,'0')}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="options">
+        <button class="option" onclick="select(0)">
+          <span class="option-letter">A</span>
+          <span>${q.a}</span>
+        </button>
+        <button class="option" onclick="select(1)">
+          <span class="option-letter">B</span>
+          <span>${q.b}</span>
+        </button>
+        <button class="option" onclick="select(2)">
+          <span class="option-letter">C</span>
+          <span>${q.c}</span>
+        </button>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="prev()" ${current === 0 ? 'disabled' : ''}>← 上一题</button>
+        <button class="nav-btn" onclick="next()" id="nextBtn" ${answers[current] === null ? 'disabled' : ''}>
+          ${current === questions.length - 1 ? '查看结果 →' : '下一题 →'}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function select(opt) {
+  answers[current] = opt;
+  setTimeout(() => {
+    if (current < questions.length - 1) {
+      current++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 250);
+}
+
+function next() {
+  if (answers[current] === null) return;
+  if (current < questions.length - 1) {
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prev() {
+  if (current > 0) {
+    current--;
+    renderQuestion();
+  }
+}
+
+function computeResult() {
+  const scores = { LC: 0, IT: 0, RP: 0, SA: 0 };
+  questions.forEach((q, i) => {
+    if (answers[i] !== null) scores[q.dim] += answers[i];
+  });
+  const code =
+    (scores.LC >= 7 ? 'C' : 'L') +
+    (scores.IT >= 7 ? 'T' : 'I') +
+    (scores.RP >= 7 ? 'P' : 'R') +
+    (scores.SA >= 7 ? 'A' : 'S');
+  return { code, scores };
+}
+
+function getRarityClass(rarity) {
+  if (rarity <= 3) return 'rarity-rare';
+  if (rarity <= 6) return 'rarity-uncommon';
+  return 'rarity-common';
+}
+
+function getDimStrength(val) {
+  const diff = Math.abs(val - 6);
+  const strength = 50 + (diff / 6) * 50;
+  return Math.round(strength);
+}
+
+function showResult() {
+  document.getElementById('test').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const { code, scores } = computeResult();
+  const r = results[code];
+
+  const dimData = [
+    { labelL: '逻辑分析 (L)', labelR: '创意发散 (C)', val: scores.LC, max: 12, left: 'L', right: 'C' },
+    { labelL: '独立钻研 (I)', labelR: '团队协作 (T)', val: scores.IT, max: 12, left: 'I', right: 'T' },
+    { labelL: '理论研究 (R)', labelR: '实践应用 (P)', val: scores.RP, max: 12, left: 'R', right: 'P' },
+    { labelL: '稳定安全 (S)', labelR: '挑战冒险 (A)', val: scores.SA, max: 12, left: 'S', right: 'A' },
+  ];
+
+  const dimsHtml = dimData.map(d => {
+    const pct = (d.val / d.max) * 100;
+    const isRight = d.val >= 7;
+    const strength = getDimStrength(d.val);
+    return `
+      <div class="dim-item">
+        <div class="dim-head">
+          <div class="dim-label-row">
+            <span class="dim-label ${!isRight ? 'active' : ''}">${d.labelL}</span>
+            <span style="color:var(--muted)">·</span>
+            <span class="dim-label ${isRight ? 'active' : ''}">${d.labelR}</span>
+          </div>
+          <span class="dim-strength">倾向强度 ${strength}%</span>
+        </div>
+        <div class="dim-bar">
+          <div class="dim-fill" style="width: 0%" data-w="${pct}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const keywordsHtml = r.keywords.map(k => `<span class="keyword">${k}</span>`).join('');
+  const iconsHtml = r.icons.map(i => `<span class="icon-chip">✨ ${i}</span>`).join('');
+
+  const majorsHtml = r.majors.map(m => {
+    const diffStars = '★'.repeat(m.difficulty) + '☆'.repeat(5 - m.difficulty);
+    return `
+      <div class="major">
+        <div class="major-head">
+          <div class="major-title">
+            <div class="major-icon">${m.icon}</div>
+            <div class="major-name">${m.name}</div>
+          </div>
+          <div class="fit-badge">适配 ${m.fit}%</div>
+        </div>
+        <div class="major-reason">${m.reason}</div>
+        <div class="major-meta">
+          <div class="meta-item">
+            <div class="meta-label">就业方向</div>
+            <div class="meta-val">${m.jobs}</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">学习难度</div>
+            <div class="meta-val" style="color:#f59e0b">${diffStars}</div>
+          </div>
+        </div>
+        <div class="major-warn">
+          <strong>⚠️ 避坑提醒：</strong>${m.warn}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // 生成其他类型分布（模拟）
+  const otherTypes = Object.keys(results).filter(k => k !== code).slice(0, 3);
+  const otherPct = 30; // 其他类型合计占比
+  const myPct = r.rarity;
+  const restPct = 100 - myPct - otherPct;
+
+  document.getElementById('result').innerHTML = `
+    <div class="result-wrap">
+      <div class="result-card">
+        <div class="rarity-badge ${getRarityClass(r.rarity)}">
+          ${r.rarity <= 3 ? '💎' : r.rarity <= 6 ? '✨' : '🌟'} ${r.rarityLabel}
+        </div>
+        <div class="result-code">TYPE · ${code}</div>
+        <span class="result-emoji">${r.emoji}</span>
+        <h2 class="result-title">${r.name}</h2>
+        <p class="result-desc">${r.desc}</p>
+        <div class="rarity-stat">
+          全球仅有 <strong>${r.rarity}%</strong> 的人和你一样
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">🏷️ 你的关键词</div>
+        <div class="keywords">${keywordsHtml}</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">📊 维度画像</div>
+        ${dimsHtml}
+      </div>
+
+      <div class="section">
+        <div class="section-title">⚡ 优势与盲点</div>
+        <div class="sw-grid">
+          <div class="sw-box strength">
+            <div class="sw-label">✅ 你的天赋优势</div>
+            <ul>${r.strengths.map(s => `<li>${s}</li>`).join('')}</ul>
+          </div>
+          <div class="sw-box weakness">
+            <div class="sw-label">👁️ 需要注意的盲点</div>
+            <ul>${r.weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">🧬 你的个人档案</div>
+        <div class="profile-grid">
+          <div class="profile-item">
+            <div class="profile-label">学习方式</div>
+            <div class="profile-val">${r.learningStyle}</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">理想工作环境</div>
+            <div class="profile-val">${r.workEnv}</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">精神动物</div>
+            <div class="profile-val">${r.spiritAnimal}</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">代表颜色</div>
+            <div class="profile-val">${r.color}</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">能量来源</div>
+            <div class="profile-val">${r.energy}</div>
+          </div>
+          <div class="profile-item">
+            <div class="profile-label">同类名人</div>
+            <div class="profile-val">${r.icons.join(' · ')}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">🌍 人群分布</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">
+          在所有测试者中，你是属于少数的那一群人
+        </p>
+        <div class="dist-chart">
+          <div class="dist-seg" style="flex:${myPct};background:var(--accent)"></div>
+          <div class="dist-seg" style="flex:${otherPct};background:#a78bfa"></div>
+          <div class="dist-seg" style="flex:${restPct};background:#e5e7eb"></div>
+        </div>
+        <div class="dist-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>你 (${myPct}%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>相近类型 (${otherPct}%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#e5e7eb"></span>其他 (${restPct}%)</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">🎓 为你量身定制的专业</div>
+        ${majorsHtml}
+      </div>
+
+      <div class="section" style="background:transparent;border:none;padding:0;">
+        <div class="motto">
+          <div class="motto-label">💫 你的命运箴言</div>
+          ${r.motto}
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-outline" onclick="shareResult()">📤 分享结果</button>
+        <button class="btn" onclick="restart()">🔄 重新测试</button>
+      </div>
+    </div>
+  `;
+
+  // 动画触发
+  setTimeout(() => {
+    document.querySelectorAll('.dim-fill').forEach(el => {
+      el.style.width = el.dataset.w;
+    });
+  }, 100);
+}
+
+function shareResult() {
+  const { code } = computeResult();
+  const r = results[code];
+  const text = `🎯 我在「专业星球」测出的类型是：\n\n${r.emoji} ${r.name}（${code}）\n🏷 ${r.keywords.join(' · ')}\n\n💎 全球仅 ${r.rarity}% 的人和我一样！\n\n${r.desc}\n\n🎓 推荐专业：${r.majors.map(m => `${m.name}(${m.fit}%)`).join('、')}\n\n✨ 我的命运箴言：${r.motto}\n\n👇 你也来测测看吧！`;
+
+  if (navigator.share) {
+    navigator.share({ title: '专业星球测试结果', text }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    });
+  } else {
+    alert(text);
+  }
+}
+
+function restart() {
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('landing').style.display = 'flex';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
+
